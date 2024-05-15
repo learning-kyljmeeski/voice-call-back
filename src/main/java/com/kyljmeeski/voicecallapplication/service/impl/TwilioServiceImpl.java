@@ -12,19 +12,19 @@ import org.springframework.stereotype.Service;
 public class TwilioServiceImpl implements TwilioService {
     private String accountSid;
     private String authToken;
+    @Value("${twilio.phone.number}")
     private String fromPhoneNumber;
 
     public TwilioServiceImpl(
             @Value("${twilio.account.sid}") String accountSid,
-            @Value("${twilio.auth.token}") String authToken,
-            @Value("${twilio.phone.number}") String fromPhoneNumber
+            @Value("${twilio.auth.token}") String authToken
     ) {
         Twilio.init(accountSid, authToken);
     }
 
     @Override
     public void makeCall(String toPhoneNumber, String messageUrl) {
-        Call call = Call.creator(
+        Call.creator(
                 new PhoneNumber(toPhoneNumber),
                 new PhoneNumber(fromPhoneNumber),
                 new Twiml("<Response><Say>" + messageUrl + "</Say></Response>")
